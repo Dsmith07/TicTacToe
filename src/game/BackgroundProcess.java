@@ -1,0 +1,193 @@
+package game;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class backgroundProcess {
+    private static class Player{
+        char sign;
+        int move = 0;
+        int moves[];
+        public Player(char s, int size){
+            sign = s;
+            moves = new int[(size*size)+2];
+        }
+    }
+
+    static char[][] generateBoard(int size) {
+
+        char board[][] = new char[size][size];
+
+        for(int i =0; i<size; i++) {
+
+            for(int j =0; j<size; j++) {
+
+                board[i][j] = '.';
+            }
+        }
+        return board;
+    }
+
+    static void printBoard(char board[][],int size) {
+
+        for(int i =0; i<size; i++) {
+
+            for(int j =0; j<size; j++) {
+
+                System.out.print(" "+board[i][j]);
+
+            }
+
+            System.out.println();
+        }
+    }
+
+
+    static void move(Player p, char board[][], int x, int y) throws InvalidMoveException {
+
+        if(x<0 || y<0 || x >= board.length || y >= board.length || board[y][x] != '.') {
+
+            throw new InvalidMoveException(board.length);
+        }
+
+        p.moves[2*p.move] = x;
+
+        p.moves[2*p.move+1] = y;
+
+        p.move+=1;
+
+        board[y][x] = p.sign;
+    }
+
+    static void winner(Player p) {
+
+        System.out.println("****************");
+
+        System.out.println("*    "+p.sign+" won!    *");
+
+        System.out.println("****************");
+    }
+
+    static void draw() {
+
+        System.out.println("****************");
+
+        System.out.println("*  match draw! *");
+
+        System.out.println("****************");
+    }
+
+
+
+    static void checkWinner(char board[][], Player p1, Player p2) {
+
+        Player p;
+
+        if(p1.move > p2.move)
+
+            p = p1;
+
+        else
+
+            p = p2;
+
+        //check row and columns
+
+        Map<Integer, Integer> X = new HashMap<Integer, Integer>();
+
+        Map<Integer, Integer> Y = new HashMap<Integer, Integer>();
+
+        //System.out.println(p.moves.length);
+
+        for(int i=0, j=1; j<(2*p.move); i+=2, j+=2) {
+
+            //System.out.println(p.moves[i]+" "+p.moves[j]);
+
+            if(X.containsKey(p.moves[i]) || Y.containsKey(p.moves[j])) {
+
+                if(X.containsKey(p.moves[i])) {
+
+                    if(X.get(p.moves[i])+1 == board.length) {
+
+                        winner(p);
+
+                        System.exit(0);
+
+                    }
+
+                    X.put(p.moves[i], X.get(p.moves[i])+1);
+
+                }
+
+                if(Y.containsKey(p.moves[j])) {
+
+                    if(Y.get(p.moves[j])+1 == board.length) {
+
+                        winner(p);
+
+                        System.exit(0);
+
+                    }
+
+                    Y.put(p.moves[j], Y.get(p.moves[j])+1);
+
+                }
+
+            }
+
+            else {
+
+                X.put(p.moves[i], 1);
+
+                Y.put(p.moves[j], 1);
+
+            }
+        }
+
+
+        //check diagonals
+
+        boolean d1 = true, d2 = true;
+
+
+
+        for(int i = 0; i<board.length; i++) {
+
+            for(int j=0; j<board.length; j++) {
+
+                if(!d1 && !d2)
+
+                    break;
+
+                if(i == j && d1) {
+
+                    if(!(board[i][j] == p.sign))
+
+                        d1 = false;
+
+                }
+
+                if(i+j==(board.length-1) && d2) {
+
+                    if(!(board[i][j] == p.sign))
+
+                        d2 = false;
+
+                }
+
+            }
+
+            if(!d1 && !d2)
+
+                break;
+
+        }
+
+        if(d1 || d2) {
+
+            winner(p);
+
+            System.exit(0);
+
+        }
+    }}
