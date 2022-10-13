@@ -3,7 +3,7 @@ package game;
 import java.util.HashMap;
 import java.util.Map;
 
-public class backgroundProcess {
+public class BackgroundProcess {
     private static class Player{
         char sign;
         int move = 0;
