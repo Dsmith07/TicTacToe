@@ -155,55 +155,49 @@ public class TicTacToe {
 
     static void startGame(char board[][], Player p1, Player p2, int size) {
         System.out.println("==============================");
-
         System.out.println("| enter x and y co-ordinates |");
-
-        System.out.println("| of your move. [ex- 0 0] |");
-
+        System.out.println("| of your move. [ex- 1 1]    |");
         System.out.println("==============================");
 
-        int n=1; int numberOfMoves = size*size;
-
+        int n = 1;
+        int numberOfMoves = size * size;
         Scanner sc = new Scanner(System.in);
 
-        while(numberOfMoves>0) {
+        while (numberOfMoves > 0) {
+            int x = -1, y = -1;
+            boolean validMove = false;
 
-        try {
+            while (!validMove) {
+                try {
+                    System.out.print("\nPlayer " + n + " move--> ");
+                    x = sc.nextInt() - 1;
+                    y = sc.nextInt() - 1;
 
-            System.out.print("\nPlayer "+n+" move--> ");
-
-            int x = sc.nextInt();
-
-            int y = sc.nextInt();
-
-            if(n == 1) {
-                move(p1, board, x, y);
-                n++;
+                    if (n == 1) {
+                        move(p1, board, x, y);
+                        n++;
+                    } else {
+                        move(p2, board, x, y);
+                        n--;
+                    }
+                    validMove = true; // Move is valid, exit inner loop
+                    numberOfMoves--;
+                } catch (InvalidMoveException e) {
+                    System.out.println("Invalid move! Please try again.");
+                    printBoard(board, size);
+                    // No need to consume input here; we want to re-prompt
+                } catch (InputMismatchException e) {
+                    System.out.println("Wrong input! Please enter two integers.");
+                    printBoard(board, size);
+                    sc.next(); // Consume the invalid input
+                }
             }
 
-            else {
-                move(p2, board, x, y);
-                n--;
-            }
-
-            numberOfMoves--;
+            printBoard(board, size);
+            checkWinner(board, p1, p2);
         }
-        catch(InvalidMoveException e) {
-            System.out.println("invalid move!");
-        }
-
-        catch(InputMismatchException e) {
-            System.out.println("wrong input!");
-            sc.next();
-        }
-
-        printBoard(board, size);
-
-        checkWinner(board, p1, p2);
-    }
 
         draw();
-
         sc.close();
     }
     public static void main(String[] args) {

@@ -7,7 +7,7 @@ public class InvalidMoveException extends Exception{
 
         System.out.println("| 1. x and y co-ordinates should |");
 
-        System.out.println("|    range from 0 to "+size+" !!        |");
+        System.out.println("|    range from 1 to 3 !!        |");
 
         System.out.println("| 2. x and y co-ordinates are    |");
 
